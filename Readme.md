@@ -147,17 +147,14 @@ It is important to note that there are a number of issues to address when benchm
 
 # AutoBench Quick Start Guide
 
-
 ## Installing and Invoking AutoBench
 
 Get AutoBench up and running in five steps:
 
 1. Download the source files from this GitHub repository;
-2. Run `cabal install AutoBench`
+2. Run `stack build`;
 4. Copy and paste the code from the primer above and save it to a file called `Input.hs` in the working directory;
-5. Run `AutoBench "Input.hs"`
-
-Note that if you install AutoBench in a cabal sandbox, you must ensure you can access the AutoBench binary file. For example, Mac users can find installed binaries in `.cabal-sandbox/bin/`.
+5. Run `stack exec -- AutoBench Input.hs`.
 
 ## Test Files
 Test files are simply Haskell modules that contain test programs, test data generators (or user-specified test data), and test suites. These are referred to collectively as *test inputs*, and are explained in the following subsection.
