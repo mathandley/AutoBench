@@ -147,6 +147,20 @@ It is important to note that there are a number of issues to address when benchm
 
 # AutoBench Quick Start Guide
 
+## Dependencies
+
+You will need to do the equivalent of before building.
+
+### Debian / Ubuntu
+
+```shell
+# required for cairo
+$ sudo apt install libgirepository1.0-dev libwebkit2gtk-4.0-dev libgtksourceview-3.0-dev
+
+# required for hmatrix
+$ sudo apt install libgsl0-dev liblapack-dev libatlas-base-dev
+```
+
 ## Installing and Invoking AutoBench
 
 Get AutoBench up and running in five steps:
