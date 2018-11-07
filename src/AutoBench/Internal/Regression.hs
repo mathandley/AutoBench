@@ -1,5 +1,6 @@
 
-{-# OPTIONS_GHC -Wall #-}  
+{-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE CPP #-}
 
 {-|
 
@@ -81,6 +82,12 @@ import AutoBench.Internal.Types
   , LinearType(..)
   , numPredictors 
   )
+
+#ifdef MIN_VERSION_base
+#if MIN_VERSION_base(4,11,0)
+import Prelude hiding ((<>))
+#endif
+#endif
 
 -- * 'LinearCandidate' generation
 
