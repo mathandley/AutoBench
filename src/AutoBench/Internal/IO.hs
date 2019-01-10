@@ -78,7 +78,6 @@ import           System.IO                 (Handle, hFlush, stdout)
 import           System.IO.Error           (isDoesNotExistError)
 import qualified Text.PrettyPrint.HughesPJ as PP
 import qualified Text.Megaparsec           as MP
-import qualified Text.Megaparsec.Char      as MP
 
 import System.Process
   ( ProcessHandle
@@ -531,7 +530,7 @@ generateBenchmarkingReport mn ts fp = do
         void $ (symbol "Input Sizes") MP.<|> (symbol "Input Size")
         ds <- parseDataSize
         void $ symbol "/"
-        idt <- MP.manyTill MP.anyChar MP.eof
+        idt <- MP.manyTill MP.anySingle MP.eof
         return (idt, ds)
 
       -- Parse the encoded baseline size from the name of a Criterion report.
