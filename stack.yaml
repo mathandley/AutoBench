@@ -41,6 +41,7 @@ resolver: lts-12.16
 extra-deps:
 - Chart-1.9@sha256:f41568b6b3704f66c2ec163295b430ab7d798f91de426c2d5aba747d1135cd9b
 - Chart-cairo-1.9@sha256:82875639be230c9406dbea650647b2dc94b11060160d6dad2c98551bb23d544f
+- megaparsec-7.0.4
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
