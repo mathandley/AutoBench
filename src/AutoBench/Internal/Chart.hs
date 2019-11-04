@@ -34,6 +34,7 @@ import Control.Exception                      (SomeException, catch)
 import Control.Lens                           ((.=), (%=), _Just)
 import Control.Monad                          (void)
 import Data.Colour                            (AlphaColour, opaque, withOpacity)
+import Data.Colour.SRGB                       (sRGB24)
 import Data.Default.Class                     (def)
 import Data.List                              (nub)
 import Data.Maybe                             (catMaybes)
@@ -296,14 +297,20 @@ plotAnalGraph progPlots blPlot = fillBackground def . gridToRenderable $
     colours :: [AlphaColour Double]                                                                 -- <TO-DO>: Add more colours.
     colours  = fmap opaque                                                                          -- Number of colours = number of test programs so 7 isn't enough!
       [
-        blue
+        orange
+      , skyblue
+      , bluishgreen
+      , yellow
+      , blue
+      , vermillion
+      , reddishpurple
+      , black
       , red
       , forestgreen
       , darkmagenta
       , deeppink
       , darkorange
       , coral
-      , deepskyblue
       , gainsboro
       , maroon
       , orchid
@@ -313,6 +320,10 @@ plotAnalGraph progPlots blPlot = fillBackground def . gridToRenderable $
       , gold
       , indianred
       ]
+
+    bluishgreen = sRGB24 0 158 115
+    vermillion = sRGB24 213 94 0
+    reddishpurple = sRGB24 204 121 167
 
     -- Get the coordinates from each plot.
     getCoords :: (Id, [Coord], Maybe String, Maybe [Coord]) -> [Coord]
