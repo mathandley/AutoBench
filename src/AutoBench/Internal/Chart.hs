@@ -24,7 +24,7 @@
    ----------------------------------------------------------------------------
    - More user options for graphing, plot just raws/just trends/etc.;
    - Combine lens setters;
-   - Add more colours;
+   - Make all colours colour-blind friendly;
    -
 -}
 
@@ -88,21 +88,11 @@ plotAnalGraph
   -> Maybe (Id, [Coord], Maybe String, Maybe [Coord]) -- As above but for baseline measurements.
   -> Renderable (LayoutPick Double Double Double)
 plotAnalGraph progPlots blPlot = fillBackground def . gridToRenderable $
-   tspan logo (8, 8) `overlay` graphGrid `overlay` (tspan xAxisLabel (8, 7))
+   tspan logo (8, 8) `overlay` graphGrid
 
   where
 
     -- Graph elements: START --------------------------------------------------
-
-    -- The spacing for the x-axis title is annoying, and doesn't seem to be
-    -- modifiable. So we've hacked it.
-    -- Hack to move the x-axis title away from the legend.
-    legendWidth = sum $ fmap length $ take 4 $ fmap sel1 progPlots ++ nub
-      (catMaybes $ fmap sel3 progPlots) ++ maybe [] (\bl -> maybe [] return $
-        sel3 bl) blPlot
-    xAxisLabel = setPickFn nullPickFn $
-      label (def {_font_size = 40 }) HTA_Centre VTA_BaseLine $
-      concat (replicate (legendWidth - 48) "\t\t") ++ "Input Size"  -- Hack to move the x-axis title away from the legend.
 
     -- Add an AutoBench logo.
     logo = setPickFn nullPickFn
@@ -128,14 +118,8 @@ plotAnalGraph progPlots blPlot = fillBackground def . gridToRenderable $
       layout_title .= foldr1 (\s1 acc -> s1 ++ " vs. " ++ acc) (fmap sel1 progPlots)
 
       -- Axes:
-
-      -- Note: hacked the x-axis title because the spacing was an issue.
-      -- We set the title to empty string for the spacing, then placed a label
-      -- underneath it.
-      layout_x_axis . laxis_title .= " "
-      -- Edit the font size to change distance between x-axis labels and title.
-      layout_x_axis . laxis_title_style . font_size .= 15.0
-      -- Rest of settings are standard
+      layout_x_axis . laxis_title                                .= "Input Size"
+      layout_x_axis . laxis_title_style . font_size              .= 40.0
       layout_x_axis . laxis_style . axis_line_style . line_width .= 3.0
       layout_x_axis . laxis_style . axis_grid_style . line_width .= 3.0
       layout_x_axis . laxis_style . axis_label_gap               .= 20.0
@@ -321,8 +305,8 @@ plotAnalGraph progPlots blPlot = fillBackground def . gridToRenderable $
       , indianred
       ]
 
-    bluishgreen = sRGB24 0 158 115
-    vermillion = sRGB24 213 94 0
+    bluishgreen   = sRGB24 0   158 115
+    vermillion    = sRGB24 213 94  0
     reddishpurple = sRGB24 204 121 167
 
     -- Get the coordinates from each plot.
