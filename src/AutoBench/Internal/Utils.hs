@@ -59,11 +59,9 @@ module AutoBench.Internal.Utils
 
   ) where 
 
-import           Control.Applicative          ((<*>))
 import           Data.Char                    (isSpace, toUpper)
 import           Data.List                    ( dropWhileEnd, intercalate
                                               , tails, transpose )
-import           Data.Monoid                  ((<>))
 import           Data.Void                    (Void)
 import           Language.Haskell.Interpreter (ModuleName)
 import qualified Options.Applicative          as OPTS
