@@ -67,7 +67,7 @@ import qualified Data.Map                  as Map
 import           Data.Ord                  (comparing)
 import qualified Data.Vector               as V
 import qualified DynFlags                  as GHC
-import qualified GHC                       as GHC
+import qualified GHC
 import qualified GHC.Paths                 as GHC
 import           Statistics.Types          (estPoint)
 import           System.Directory          ( doesFileExist, getDirectoryContents
