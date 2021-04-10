@@ -50,13 +50,14 @@ module AutoBench.Internal.UserIO
 
 import           Control.Arrow             ((&&&))
 import           Control.Exception         (SomeException, catch)
+import           Control.Monad.Catch       (MonadMask)
 import           Control.Monad.IO.Class    (MonadIO, liftIO)
 import           Data.Char                 (toLower)
 import           Data.List                 (sort)
 import           Data.List.Utils           (replace)
 import           Data.Maybe                (catMaybes)
 import qualified Data.Vector.Storable      as V
-import           System.Console.Haskeline  ( InputT, MonadException
+import           System.Console.Haskeline  ( InputT
                                            , defaultSettings, getInputLine
                                            , runInputT )
 import           System.Directory          (doesFileExist)
@@ -106,7 +107,7 @@ import AutoBench.Internal.Types
 --
 -- In all cases, users can also review the 'UserInput's data structure.
 selTestSuiteOption
-  :: (MonadIO m, MonadException m)
+  :: (MonadIO m, MonadMask m)
   => UserInputs
   -> InputT m [(Id, TestSuite)]
   -- Note: /to be generalised to one or more test suites running sequentially/.
@@ -165,7 +166,7 @@ selTestSuiteOption inps = case _testSuites inps of
                then ".." ++ show (l :: Int) ++ "]"
                else "]"
     -- Invalid user input message.
-    inpErr :: (MonadIO m, MonadException m) => InputT m ()
+    inpErr :: (MonadIO m, MonadMask m) => InputT m ()
     inpErr  = liftIO $ putStrLn "\n Error: invalid choice."
 
     -- A simplified pretty printing for 'TestSuite's.
@@ -217,7 +218,7 @@ selTestSuiteOption inps = case _testSuites inps of
 -- * If precisely one is available, then it is picked automatically;
 -- * If more than one is available, then users have a choice.
 selFitOptions
-  :: (MonadIO m, MonadException m)
+  :: (MonadIO m, MonadMask m)
   => [(Id, [LinearFit])]          -- Name of each test program and zero or more model choices.
   -> InputT m [(Id, LinearFit)]   -- Name of each test program and choice.
 selFitOptions xss = catMaybes <$> mapM (uncurry selFitOption) xss
@@ -226,7 +227,7 @@ selFitOptions xss = catMaybes <$> mapM (uncurry selFitOption) xss
 
     -- One choice per test program.
     selFitOption
-      :: (MonadIO m, MonadException m)
+      :: (MonadIO m, MonadMask m)
       => Id
       -> [LinearFit]
       -> InputT m (Maybe (Id, LinearFit))
@@ -234,7 +235,7 @@ selFitOptions xss = catMaybes <$> mapM (uncurry selFitOption) xss
     selFitOption idt [lf] = return $ Just (idt, lf)   -- Precisely one choice.
     selFitOption idt lfs  = do                        -- Two or more choices, users pick.
       showFitOptions idt lfs                          -- Show the equation of each model and its rank.
-      let go :: (MonadIO m, MonadException m) => InputT m (Maybe (Id, LinearFit))
+      let go :: (MonadIO m, MonadMask m) => InputT m (Maybe (Id, LinearFit))
           go = do liftIO $ putStrLn ""
                   liftIO $ putStrLn $ unlines                                                       -- <TO-DO>: PP.
                     [ "  \9656 Select a fit       [1" ++ endRange
@@ -273,14 +274,14 @@ selFitOptions xss = catMaybes <$> mapM (uncurry selFitOption) xss
                    then ".." ++ show (l :: Int) ++ "]"
                    else "]"
 
-        inpErr :: (MonadIO m, MonadException m) => InputT m ()
+        inpErr :: (MonadIO m, MonadMask m) => InputT m ()
         inpErr  = liftIO $ putStrLn "\n Error: invalid choice."
 
 
     -- Show the 'Stats' for each model: allowing users to see which
     -- has the best fit according to a /range/ of different fitting statistics.
     showStats
-      :: (MonadIO m, MonadException m)
+      :: (MonadIO m, MonadMask m)
       => [LinearFit]  -- Model options.
       -> InputT m ()
     showStats lfs = liftIO $ do
@@ -296,7 +297,7 @@ selFitOptions xss = catMaybes <$> mapM (uncurry selFitOption) xss
 
     -- Show only the equations of the models on offer, with a ranking.
     showFitOptions
-      :: (MonadIO m, MonadException m)
+      :: (MonadIO m, MonadMask m)
       => Id
       -> [LinearFit]
       -> InputT m ()
